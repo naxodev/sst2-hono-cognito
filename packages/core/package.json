@@ -1,0 +1,17 @@
+{
+  "name": "@sst2-hono-cognito/core",
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "sst bind vitest",
+    "typecheck": "tsc -noEmit"
+  },
+  "devDependencies": {
+    "vitest": "^1.6.0",
+    "@types/node": "^20.12.12",
+    "sst": "^2.42.0"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
+}
