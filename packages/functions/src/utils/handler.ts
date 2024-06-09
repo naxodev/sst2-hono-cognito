@@ -2,7 +2,6 @@ import {
   APIGatewayEventRequestContextJWTAuthorizer,
   APIGatewayEventRequestContextV2,
   APIGatewayEventRequestContextV2WithAuthorizer,
-  APIGatewayProxyEventV2,
   APIGatewayProxyEventV2WithJWTAuthorizer,
 } from 'aws-lambda';
 import { Context as SSTContext, memo } from 'sst/context/context2.js';
@@ -65,13 +64,15 @@ export function Handler(cb: (c: HonoContext) => Promise<TypedResponse>) {
   };
 }
 
+export const useHonoContext = HonoRequestContext.use;
+
 export function useEvent() {
-  const ctx = HonoRequestContext.use();
+  const ctx = useHonoContext();
   return ctx.env.event;
 }
 
 export function useLambdaContext() {
-  const ctx = HonoRequestContext.use();
+  const ctx = useHonoContext();
   return ctx.env.lambdaContext;
 }
 
@@ -120,16 +121,13 @@ export function useQueryParam<T = string>(name: string) {
 }
 
 export function usePathParams() {
-  const evt = useEvent();
-  const path =
-    (evt as APIGatewayProxyEventV2WithJWTAuthorizer | APIGatewayProxyEventV2)
-      .pathParameters || {};
-
-  return path;
+  const ctx = useHonoContext();
+  return ctx.req.param();
 }
 
 export function usePathParam(name: string) {
-  return usePathParams()[name];
+  const ctx = useHonoContext();
+  return ctx.req.param(name);
 }
 
 export const useBody = /* @__PURE__ */ memo(() => {
