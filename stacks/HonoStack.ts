@@ -25,6 +25,11 @@ export function HonoStack(ctx: StackContext) {
       },
     },
     routes: {
+      // Needed because of https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html#http-api-cors-default-route
+      'OPTIONS /{proxy+}': {
+        authorizer: 'none',
+        function: 'packages/functions/src/cors.handler',
+      },
       $default: 'packages/functions/src/index.handler',
     },
   });
