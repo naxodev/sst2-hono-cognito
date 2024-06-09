@@ -2,18 +2,20 @@ import { Todo } from '@sst2-hono-cognito/core/todo';
 import { Hono } from 'hono';
 import { Bindings, useJsonBody } from './utils/handler';
 
-export function attachTodoAPI(app: Hono<{ Bindings: Bindings }>) {
-  app.post('/todo/create', async (c) => {
-    const body = useJsonBody();
+const app = new Hono<{ Bindings: Bindings }>();
 
-    console.log(body);
+app.post('/create', async (c) => {
+  const body = useJsonBody();
 
-    await Todo.create();
+  console.log(body);
 
-    return c.text('Todo created', { status: 201 });
-  });
+  await Todo.create();
 
-  app.get('/todo/list', async (c) => {
-    return c.json(Todo.list());
-  });
-}
+  return c.text('Todo created', { status: 201 });
+});
+
+app.get('/list', async (c) => {
+  return c.json(Todo.list());
+});
+
+export default app

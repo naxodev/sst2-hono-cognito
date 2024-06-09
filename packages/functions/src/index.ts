@@ -2,11 +2,11 @@ import { Hono } from 'hono';
 import { handle } from 'hono/aws-lambda';
 import { HTTPException } from 'hono/http-exception';
 import { Bindings } from './utils/handler';
-import { attachTodoAPI } from './todo';
+import todo from './todo';
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-attachTodoAPI(app);
+app.route('/todo', todo);
 
 app.onError((err, c) => {
   console.error(err);
